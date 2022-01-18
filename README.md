@@ -1,6 +1,8 @@
 # Breakout
 Atari Breakout remake made with Birb2D
 
+![Screenshot](./screenshot.png)
+
 ## Building
 You need to have [Birb2D](https://github.com/Toasterbirb/Birb2D) library installed.
 
