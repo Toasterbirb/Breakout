@@ -133,17 +133,17 @@ int main(int argc, char **argv)
 					switch (window.event.key.keysym.scancode)
 					{
 						/* Left */
-						case (80):
+						case (SDL_SCANCODE_LEFT):
 							playerMovementDirection = Side::Left;
 							break;
 
 						/* Right */
-						case (79):
+						case (SDL_SCANCODE_RIGHT):
 							playerMovementDirection = Side::Right;
 							break;
 
 						/* Release the ball */
-						case (44):
+						case (SDL_SCANCODE_SPACE):
 							ballMoving = true;
 							break;
 
