@@ -14,6 +14,7 @@ enum Side
 void GenerateTiles();
 void DrawPlayArea();
 void MirrorBallVector(Birb::Vector2f* ballVector, Side side);
+float CalcPlayerSpeed(float basePlayerSpeed, Birb::TimeStep timeStep);
 
 struct TileCollider
 {
@@ -86,7 +87,7 @@ struct Tile
 	}
 };
 
-Birb::Window window("Breakout", Birb::Vector2int(1280, 720), 240, false);
+Birb::Window window("Breakout", Birb::Vector2int(1280, 720), 60, false);
 SDL_Texture* playerSprite = Birb::Resources::LoadTexture("./res/textures/player.png");
 Birb::Entity player = Birb::Entity("Player", Birb::Rect((float)window.window_dimensions.x / 2 - 64, 680, 128, 12), playerSprite);
 bool GameRunning = true;
@@ -100,14 +101,14 @@ int tileCountY = 6;
 int main(int argc, char **argv)
 {
 	Birb::TimeStep timeStep;
-	timeStep.Init();
+	timeStep.Init(&window);
 
 	/* Load textures */
 	tileSprite = Birb::Resources::LoadTexture("./res/textures/tile.png");
 
 	/* Gameloop variables */
 	Side playerMovementDirection;
-	float playerSpeed = 10;
+	float playerSpeed = 650;
 
 	bool ballMoving = false;
 	Birb::Vector2int ballPos = { (int)player.rect.x + (int)(player.rect.w / 2), 660 };
@@ -164,13 +165,13 @@ int main(int argc, char **argv)
 		switch (playerMovementDirection)
 		{
 			case (Side::Left):
-				if (player.rect.x - playerSpeed > window.window_dimensions.x / 2.0 - (playAreaSize / 2.0) + playerSpeed)
-					player.rect.x -= playerSpeed;
+				if (player.rect.x - CalcPlayerSpeed(playerSpeed, timeStep) > window.window_dimensions.x / 2.0 - (playAreaSize / 2.0) + CalcPlayerSpeed(playerSpeed, timeStep))
+					player.rect.x -= CalcPlayerSpeed(playerSpeed, timeStep);
 				break;
 
 			case (Side::Right):
-				if (player.rect.x + playerSpeed < window.window_dimensions.x / 2.0 + (playAreaSize / 2.0) - 118 - playerSpeed)
-					player.rect.x += playerSpeed;
+				if (player.rect.x + CalcPlayerSpeed(playerSpeed, timeStep) < window.window_dimensions.x / 2.0 + (playAreaSize / 2.0) - 118 - CalcPlayerSpeed(playerSpeed, timeStep))
+					player.rect.x += CalcPlayerSpeed(playerSpeed, timeStep);
 				break;
 
 			default:
@@ -317,4 +318,9 @@ void MirrorBallVector(Birb::Vector2f* ballVector, Side side)
 		default:
 			break;
 	}
+}
+
+float CalcPlayerSpeed(float basePlayerSpeed, Birb::TimeStep timeStep)
+{
+	return basePlayerSpeed * timeStep.deltaTime;
 }
