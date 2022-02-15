@@ -8,7 +8,7 @@ all: breakout
 breakout: breakout.o
 	mkdir -p build
 	rsync -av ./res ./build/
-	$(CC) $^ $(SDL_FLAGS) -lbirb2d $(WarningFlags) -o $(outputDir)/breakout
+	$(CC) $^ -lbirb2d $(SDL_FLAGS) $(WarningFlags) -o $(outputDir)/breakout
 
 breakout.o: ./src/breakout.cpp
 	$(CC) -O2 -c $^ -o breakout.o
